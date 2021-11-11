@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import { resolve, __dirname } from 'path'
+import { resolve } from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -8,9 +8,9 @@ export default defineConfig({
 
   build: {
     lib: {
-      entry: resolve(__dirname, 'lib/main.js'),
-      name: 'MyLib',
-      fileName: (format) => `my-lib.${format}.js`
+      entry: resolve(__dirname, 'src/main.ts'),
+      name: 'VueGLSL',
+      fileName: (format) => `vue-glsl.${format}.js`
     },
   }
 })
