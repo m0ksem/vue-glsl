@@ -1,11 +1,48 @@
-# Vue 3 + Typescript + Vite
+# VueGLSL
 
-This template should help get you started developing with Vue 3 and Typescript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## Usage
 
-## Recommended IDE Setup
+1. Import component 
 
-- [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
+```ts
+import Shader2d from './components/shader-2d.vue'
+```
 
-## Type Support For `.vue` Imports in TS
+```html
+<Shader2d :fragment="fragment" @ready="onCanvasReady" />
+```
 
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can enable Volar's `.vue` type support plugin by running `Volar: Switch TS Plugin on/off` from VSCode command palette.
+2. Create fragment shader 
+```ts
+const fragment = 
+`precision highp float;
+uniform float time;
+
+void main() {
+  gl_FragColor = vec4(sin(time), cos(time), sin(time), 1.0);
+}
+`
+```
+3. Create event listener:
+
+```ts
+let time = 0;
+
+const onCanvasReady = ({ draw, getUniform, gl }: VueGLSLReadyEvent) => {
+    const timeHandle = getUniform('time');
+
+    let lastFrame = Date.now();
+    let thisFrame: number;
+
+    // Will be executed each frame
+    draw(() => {
+      thisFrame = Date.now();
+      time += (thisFrame - lastFrame) / (100 * 60);	
+      lastFrame = thisFrame;
+
+      gl.uniform1f(timeHandle, time);
+  
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    })
+}
+```
