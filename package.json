@@ -7,6 +7,7 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "@vue/composition-api": "^1.4.0-beta.0",
     "vue": "^3.2.16",
     "vue-demi": "^0.12.1"
   },
@@ -16,6 +17,16 @@
     "sass": "^1.43.4",
     "typescript": "^4.4.3",
     "vite": "^2.6.4",
-    "vue-tsc": "^0.3.0"
+    "vue-tsc": "^0.3.0",
+    "vue": "^3.0.0"
+  },
+  "peerDependencies": {
+    "@vue/composition-api": "^1.0.0-rc.1",
+    "vue": "^2.0.0 || >=3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@vue/composition-api": {
+      "optional": true
+    }
   }
 }
