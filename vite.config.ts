@@ -12,5 +12,14 @@ export default defineConfig({
       name: 'VueGLSL',
       fileName: (format) => `vue-glsl.${format}.js`
     },
-  }
+
+    rollupOptions: {
+      external: [
+        'vue', 'vue-demi'
+      ],
+    }
+  },
+  optimizeDeps: {
+    exclude: ['vue-demi']
+  },
 })

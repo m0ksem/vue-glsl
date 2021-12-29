@@ -1,17 +1,18 @@
 {
-  "name": "glsl-vue",
+  "name": "vue-glsl",
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "serve": "vite preview"
   },
+  "main": "dist/vue-glsl.umd.js",
+  "module": "dist/vue-glsl.es.js",
   "dependencies": {
-    "@vue/composition-api": "^1.4.0-beta.0",
-    "vue": "^3.2.16",
     "vue-demi": "^0.12.1"
   },
   "devDependencies": {
+    "@vue/composition-api": "^1.4.0-beta.0",
     "@types/node": "^16.11.7",
     "@vitejs/plugin-vue": "^1.9.3",
     "sass": "^1.43.4",

@@ -992,7 +992,7 @@ vue-tsc@^0.3.0:
   dependencies:
     vscode-vue-languageservice "^0.27.0"
 
-vue@^3.2.16:
+vue@^3.0.0:
   version "3.2.21"
   resolved "https://registry.yarnpkg.com/vue/-/vue-3.2.21.tgz#55f5665172d95cf97e806b9aad0a375180be23a1"
   integrity sha512-jpy7ckXdyclfRzqLjL4mtq81AkzQleE54KjZsJg/9OorNVurAxdlU5XpD49GpjKdnftuffKUvx2C5jDOrgc/zg==
