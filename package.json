@@ -12,7 +12,6 @@
     "vue-demi": "^0.12.1"
   },
   "devDependencies": {
-    "@vue/composition-api": "^1.4.0-beta.0",
     "@types/node": "^16.11.7",
     "@vitejs/plugin-vue": "^1.9.3",
     "sass": "^1.43.4",
@@ -22,7 +21,7 @@
     "vue": "^3.0.0"
   },
   "peerDependencies": {
-    "@vue/composition-api": "^1.0.0-rc.1",
+    "@vue/composition-api": "^1.1.0",
     "vue": "^2.0.0 || >=3.0.0"
   },
   "peerDependenciesMeta": {

@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, PropType, onMounted, ref, watch } from 'vue-demi'
+import { defineComponent, PropType, onMounted, ref, watch, h } from 'vue-demi'
 import type { VueGLSLReadyEvent } from './shader-2d.types'
 import { compileShader, createProgram, createVertexBuffer, getAttribute, getUniform } from './shader-2d.utils'
 import { planeVertexData, defaultVertexSource } from './shader-2d.data'
@@ -84,17 +84,12 @@ export default defineComponent({
       restart()
     })
 
-    return {
-      canvas,
-    }
+    return () => h('canvas', {
+      ref: canvas
+    })
   },
 })
 </script>
-
-
-<template>
-  <canvas ref="canvas" />
-</template>
 
 <style lang="scss" scoped>
 canvas {

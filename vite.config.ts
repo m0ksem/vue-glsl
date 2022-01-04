@@ -14,9 +14,7 @@ export default defineConfig({
     },
 
     rollupOptions: {
-      external: [
-        'vue', 'vue-demi'
-      ],
+      external: ['vue-demi'],
     }
   },
   optimizeDeps: {
