@@ -1,0 +1,8 @@
+# https://docs.npmjs.com/misc/developers#keeping-files-out-of-your-package
+
+/src/
+tsconfig.json
+vite.config.ts
+index.html
+yarn.lock
+.gitignore

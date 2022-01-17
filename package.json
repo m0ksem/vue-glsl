@@ -1,5 +1,5 @@
 {
-  "name": "vue-glsl",
+  "name": "@m0ksem/vue-glsl",
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
@@ -28,5 +28,8 @@
     "@vue/composition-api": {
       "optional": true
     }
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   }
 }
