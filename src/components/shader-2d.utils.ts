@@ -27,7 +27,8 @@ export const compileShader = (
   ctx.compileShader(shader);
 
   if(!ctx.getShaderParameter(shader, ctx.COMPILE_STATUS)){
-    throw "Shader compile failed with: " + ctx.getShaderInfoLog(shader);
+    console.warn("Shader compile failed with: " + ctx.getShaderInfoLog(shader))
+    return null
   }
 
   return shader;

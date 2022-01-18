@@ -20,10 +20,11 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const canvas = ref<HTMLCanvasElement>()
+    const isError = ref(false)
     let program: WebGLProgram
     let ctx: WebGLRenderingContext
-    let vertexShader: WebGLShader
-    let fragmentShader: WebGLShader
+    let vertexShader: WebGLShader | null
+    let fragmentShader: WebGLShader | null
     let animationFrameIndex: number | null = null
 
     const restart = () => {
@@ -55,6 +56,8 @@ export default defineComponent({
       vertexShader = compileShader(ctx, props.vertex, ctx.VERTEX_SHADER);
       fragmentShader = compileShader(ctx, props.fragment, ctx.FRAGMENT_SHADER);
 
+      if (!vertexShader || !fragmentShader) { return isError.value = true }
+
       program = createProgram(ctx, vertexShader, fragmentShader)
 
       const planeBuffer = createVertexBuffer(ctx, planeVertexData);
@@ -73,18 +76,22 @@ export default defineComponent({
     })
 
     watch(() => props.fragment, () => {
+      isError.value = false
       fragmentShader = compileShader(ctx, props.fragment, ctx.FRAGMENT_SHADER);
+      if (!vertexShader || !fragmentShader) { return isError.value = true }
       program = createProgram(ctx, vertexShader, fragmentShader)
       restart()
     })
 
     watch(() => props.vertex, () => {
+      isError.value = false
       vertexShader = compileShader(ctx, props.vertex, ctx.VERTEX_SHADER);
+      if (!vertexShader || !fragmentShader) { return isError.value = true }
       program = createProgram(ctx, vertexShader, fragmentShader)
       restart()
     })
 
-    return () => h('canvas', {
+    return () => isError.value ? h({ text: 'Shader compilation error' }) : h('canvas', {
       ref: canvas
     })
   },
