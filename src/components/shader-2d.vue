@@ -2,7 +2,7 @@
 import { defineComponent, PropType, onMounted, ref, watch, h, onBeforeUnmount } from 'vue-demi'
 import type { VueGLSLReadyEvent } from './shader-2d.types'
 import { compileShader, createProgram, createVertexBuffer, getAttribute, getUniform } from './shader-2d.utils'
-import { defaultVertexSource } from './shader-2d.data'
+import { defaultVertexSource, planeVertexData } from './shader-2d.data'
 
 const fixCanvasSize = (canvas: HTMLCanvasElement) => {
   canvas.height = canvas.offsetHeight
@@ -10,6 +10,8 @@ const fixCanvasSize = (canvas: HTMLCanvasElement) => {
 }
 
 export default defineComponent({
+  name: 'Shader2d',
+
   props: {
     ctxOptions: { type: Object as PropType<WebGLContextAttributes>, default: () => ({}) },
     webgl: { type: String as PropType<'webgl' | 'webgl2'>, default: 'webgl' },
@@ -55,7 +57,11 @@ export default defineComponent({
       } as VueGLSLReadyEvent)
     }
 
-    const onResize = () => { canvas.value && fixCanvasSize(canvas.value) }
+    const onResize = () => { 
+      if (canvas.value) { fixCanvasSize(canvas.value) }
+      
+      if (ctx) { ctx.viewport(0, 0, ctx.canvas.width, ctx.canvas.height) }
+    }
 
     onMounted(() => {
       if (!canvas.value) { return }
@@ -72,6 +78,7 @@ export default defineComponent({
 
       program = createProgram(ctx, vertexShader, fragmentShader)
 
+      createVertexBuffer(ctx, planeVertexData);
       const positionLocaltion = getAttribute(ctx, program, 'position')
 
       ctx.enableVertexAttribArray(positionLocaltion);
