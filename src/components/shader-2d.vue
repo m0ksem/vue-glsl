@@ -2,7 +2,7 @@
 import { defineComponent, PropType, onMounted, ref, watch, h } from 'vue-demi'
 import type { VueGLSLReadyEvent } from './shader-2d.types'
 import { compileShader, createProgram, createVertexBuffer, getAttribute, getUniform } from './shader-2d.utils'
-import { planeVertexData, defaultVertexSource } from './shader-2d.data'
+import { defaultVertexSource } from './shader-2d.data'
 
 const fixCanvasSize = (canvas: HTMLCanvasElement) => {
   canvas.height = canvas.offsetHeight
@@ -11,16 +11,24 @@ const fixCanvasSize = (canvas: HTMLCanvasElement) => {
 
 export default defineComponent({
   props: {
+    ctxOptions: { type: Object as PropType<WebGLContextAttributes>, default: () => ({}) },
     webgl: { type: String as PropType<'webgl' | 'webgl2'>, default: 'webgl' },
     vertex: { type: String, default: defaultVertexSource },
     fragment: { type: String, required: true },
+
+    /** Pass null ref to access drawing context */
+    modelValue: { 
+      type: Object as PropType<VueGLSLReadyEvent | undefined | null>, 
+      default: () => ({}),
+    },
   },
 
-  emits: ['ready'],
+  emits: ['ready', 'update:modelValue'],
 
   setup(props, { emit }) {
     const canvas = ref<HTMLCanvasElement>()
     const isError = ref(false)
+
     let program: WebGLProgram
     let ctx: WebGLRenderingContext
     let vertexShader: WebGLShader | null
@@ -41,16 +49,20 @@ export default defineComponent({
             animationFrameIndex = requestAnimationFrame(frame)
           }
           frame()
-        }
+        },
+        canvas: canvas.value,
+        onResize,
       } as VueGLSLReadyEvent)
     }
+
+    const onResize = () => { canvas.value && fixCanvasSize(canvas.value) }
 
     onMounted(() => {
       if (!canvas.value) { return }
 
       fixCanvasSize(canvas.value)
 
-      ctx = canvas.value.getContext(props.webgl) as WebGLRenderingContext
+      ctx = canvas.value.getContext(props.webgl, props.ctxOptions) as WebGLRenderingContext
       if (!ctx) { throw new Error("Webgl is not supported") }
 
       vertexShader = compileShader(ctx, props.vertex, ctx.VERTEX_SHADER);
@@ -60,7 +72,6 @@ export default defineComponent({
 
       program = createProgram(ctx, vertexShader, fragmentShader)
 
-      const planeBuffer = createVertexBuffer(ctx, planeVertexData);
       const positionLocaltion = getAttribute(ctx, program, 'position')
 
       ctx.enableVertexAttribArray(positionLocaltion);
@@ -72,7 +83,22 @@ export default defineComponent({
         0 				 // how many bytes inside the buffer to start from
       );
 
+      emit('update:modelValue', {
+        ctx, gl: ctx,
+        createVertexBuffer: (data: BufferSource) => createVertexBuffer(ctx, data),
+        getUniform: (name: string) => getUniform(ctx, program, name),
+        getAttribute: (name: string) => getAttribute(ctx, program, name),
+        canvas: canvas.value,
+        onResize,
+      } as VueGLSLReadyEvent)
+
       restart()
+
+      window.addEventListener('resize', onResize)
+    })
+
+    onBeforeUnmount(() => {
+      window.removeEventListener('resize', onResize)
     })
 
     watch(() => props.fragment, () => {
@@ -96,6 +122,10 @@ export default defineComponent({
     })
   },
 })
+
+function onBeforeUnmount(arg0: () => void) {
+throw new Error('Function not implemented.')
+}
 </script>
 
 <style lang="scss" scoped>
