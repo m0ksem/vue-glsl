@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, PropType, onMounted, ref, watch, h } from 'vue-demi'
+import { defineComponent, PropType, onMounted, ref, watch, h, onBeforeUnmount } from 'vue-demi'
 import type { VueGLSLReadyEvent } from './shader-2d.types'
 import { compileShader, createProgram, createVertexBuffer, getAttribute, getUniform } from './shader-2d.utils'
 import { defaultVertexSource } from './shader-2d.data'
@@ -122,10 +122,6 @@ export default defineComponent({
     })
   },
 })
-
-function onBeforeUnmount(arg0: () => void) {
-throw new Error('Function not implemented.')
-}
 </script>
 
 <style lang="scss" scoped>
